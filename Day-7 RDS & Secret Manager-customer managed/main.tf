@@ -5,8 +5,8 @@ resource "aws_db_instance" "name" {
   engine = "mysql"
   engine_version = "8.0.41"
   db_name = "db_1"
-  username = local.rds_secrets.username
-  password = local.rds_secrets.password
+  username = jsondecode(data.aws_secretsmanager_secret_version.rds_credentials_version.secret_string)["username"]
+  password = jsondecode(data.aws_secretsmanager_secret_version.rds_credentials_version.secret_string)["password"]
   parameter_group_name = "default.mysql8.0"
   allocated_storage = 20
   publicly_accessible = false
@@ -66,13 +66,10 @@ resource "aws_security_group" "name" {
 
 # Only Calling Secrets from Secret Manager
 data "aws_secretsmanager_secret" "rds_credentials" {
-  name = "rds-credentials"
+  name = "rds-credentials"  # Secret Name
 }
 
 data "aws_secretsmanager_secret_version" "rds_credentials_version" {
   secret_id = data.aws_secretsmanager_secret.rds_credentials.id
 }
 
-locals {
-  rds_secrets = jsondecode(data.aws_secretsmanager_secret_version.rds_credentials_version.secret_string)
-}
