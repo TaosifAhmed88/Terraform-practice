@@ -11,5 +11,5 @@ resource "aws_s3_bucket" "s3" {
   bucket = "sfjerinfvweifj"
 }
 
-# terraform plan -target aws_s3_bucket.s3 --> Only specific resource will be created
+# terraform plan -target aws_s3_bucket.s3 --> Only specific resource will be planned
 # terraform apply -auto-approve -target aws_s3_bucket.s3 --> Only specific resource will be created
